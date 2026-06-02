@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-surface text-slate-100 font-sans antialiased;
+    min-height: 100dvh;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-surface;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+}
+
+@layer components {
+  /* Card */
+  .card {
+    @apply bg-surface-card rounded-2xl border border-surface-border shadow-card;
+  }
+
+  .card-elevated {
+    @apply bg-surface-elevated rounded-2xl border border-surface-border shadow-card;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5
+           font-medium text-sm transition-all duration-200 focus-visible:outline-none
+           focus-visible:ring-2 focus-visible:ring-accent/60 disabled:opacity-50
+           disabled:cursor-not-allowed active:scale-95;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-dark shadow-glow;
+  }
+
+  .btn-secondary {
+    @apply btn bg-surface-elevated text-slate-200 border border-surface-border
+           hover:bg-surface-border hover:text-white;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-400 hover:text-white hover:bg-surface-elevated;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600/20 text-red-400 border border-red-600/30 hover:bg-red-600/30;
+  }
+
+  /* Form inputs */
+  .input {
+    @apply w-full rounded-xl border border-surface-border bg-surface-elevated
+           px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500
+           focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50
+           transition-all duration-200;
+  }
+
+  .label {
+    @apply block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wide;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-pending  { @apply badge bg-amber-500/20 text-amber-400; }
+  .badge-approved { @apply badge bg-emerald-500/20 text-emerald-400; }
+  .badge-rejected { @apply badge bg-red-500/20 text-red-400; }
+  .badge-withdrawn{ @apply badge bg-slate-500/20 text-slate-400; }
+
+  /* Club colour pills */
+  .club-pill-media       { @apply badge bg-amber-500/20 text-amber-400; }
+  .club-pill-programming { @apply badge bg-indigo-500/20 text-indigo-400; }
+  .club-pill-robotics    { @apply badge bg-emerald-500/20 text-emerald-400; }
+  .club-pill-cyber       { @apply badge bg-red-500/20 text-red-400; }
+  .club-pill-ai          { @apply badge bg-violet-500/20 text-violet-400; }
+
+  /* Stat card */
+  .stat-card {
+    @apply card p-5 flex flex-col gap-1;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply w-full h-2 rounded-full bg-surface-border overflow-hidden;
+  }
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+  }
+
+  /* Sidebar nav item */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+           transition-all duration-200 text-slate-400 hover:text-white hover:bg-surface-elevated;
+  }
+  .nav-item-active {
+    @apply nav-item bg-accent/20 text-accent-light border border-accent/20;
+  }
+
+  /* Page header */
+  .page-header {
+    @apply flex items-center justify-between mb-6;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-white;
+  }
+
+  /* Table */
+  .data-table {
+    @apply w-full text-sm text-left;
+  }
+  .data-table th {
+    @apply px-4 py-3 text-xs font-medium uppercase tracking-wide text-slate-400
+           border-b border-surface-border;
+  }
+  .data-table td {
+    @apply px-4 py-3.5 border-b border-surface-border/50 text-slate-300;
+  }
+  .data-table tr:last-child td {
+    @apply border-b-0;
+  }
+  .data-table tbody tr {
+    @apply hover:bg-surface-elevated/50 transition-colors duration-150;
+  }
+
+  /* Criteria checklist item */
+  .criterion-item {
+    @apply flex items-start gap-3 p-3 rounded-xl transition-colors duration-150;
+  }
+  .criterion-item-met {
+    @apply criterion-item bg-emerald-500/10 border border-emerald-500/20;
+  }
+  .criterion-item-unmet {
+    @apply criterion-item bg-surface-elevated border border-surface-border;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent-light to-violet-300 bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  .animate-in {
+    @apply animate-fade-in;
+  }
+}

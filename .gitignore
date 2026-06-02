@@ -1,0 +1,22 @@
+# Node / Frontend dependencies & builds
+node_modules/
+dist/
+*.local
+
+# Python / Backend
+.venv/
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+.pytest_cache/
+
+# Databases & local configs
+*.db
+*.sqlite
+pgdata/
+
+# IDE / OS
+.DS_Store
+.vscode/
+.idea/
