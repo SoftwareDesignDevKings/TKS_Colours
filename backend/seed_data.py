@@ -181,40 +181,68 @@ CLUBS = [
         "colour": "#10b981",  # emerald
         "sub_clubs": [
             {
-                "slug": "robotics-half-colours",
-                "name": "Robotics - Half Colours",
-                "description": "Award level for initial outstanding contribution to Robotics club.",
+                "slug": "robotics-half-colours-contribution",
+                "name": "Robotics - Half Colours (Contribution)",
+                "description": "Half Colours award via outstanding contribution path.",
                 "colour": "#10b981",
                 "criteria": [
                     {
-                        "title": "Build and program a robot",
-                        "description": "Construct and program a robot that can complete at least one defined task or challenge.",
+                        "title": "Outstanding contribution (2+ years)",
+                        "description": "Outstanding contribution to the Club for 2 or more years.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    }
+                ],
+            },
+            {
+                "slug": "robotics-half-colours-competition",
+                "name": "Robotics - Half Colours (Competition)",
+                "description": "Half Colours award via competition achievement and junior mentoring path.",
+                "colour": "#10b981",
+                "criteria": [
+                    {
+                        "title": "Mentoring junior team (1+ years)",
+                        "description": "At least ONE year of Mentoring of a Junior Robotics team.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
                     {
-                        "title": "Attend club sessions",
-                        "description": "Attend at least 8 Robotics club sessions across the academic year.",
-                        "required_count": 8,
+                        "title": "Regional/State/National achievement",
+                        "description": "Qualify for elimination finals/win an award at a Regional/State tournament, OR qualify for National Level Championship (eg FLL, RoboCup, VRC, FTC, FRC).",
+                        "required_count": 1,
                         "sort_order": 1,
                     }
                 ],
             },
             {
-                "slug": "robotics-full-colours",
-                "name": "Robotics - Full Colours",
-                "description": "Award level for extended outstanding contribution and competition placement.",
+                "slug": "robotics-full-colours-contribution",
+                "name": "Robotics - Full Colours (Contribution)",
+                "description": "Full Colours award via outstanding contribution path.",
                 "colour": "#10b981",
                 "criteria": [
                     {
-                        "title": "Participate in a robotics challenge",
-                        "description": "Take part in an in-school or inter-school robotics competition or demonstration event.",
+                        "title": "Outstanding contribution (4+ years)",
+                        "description": "Outstanding contribution to the club for 4 or more years.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    }
+                ],
+            },
+            {
+                "slug": "robotics-full-colours-competition",
+                "name": "Robotics - Full Colours (Competition)",
+                "description": "Full Colours award via national competition achievement and junior mentoring path.",
+                "colour": "#10b981",
+                "criteria": [
+                    {
+                        "title": "Mentoring junior team (1+ years)",
+                        "description": "At least ONE year of Mentoring of a Junior Robotics team.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
                     {
-                        "title": "Document a build process",
-                        "description": "Keep an engineering journal or write-up documenting the design decisions and iteration of a build.",
+                        "title": "National Championship achievement",
+                        "description": "Qualify for elimination finals OR receive a recognized award (Excellence, Design, Amaze, Build, etc) in National Level Championship (eg FLL, RoboCup, VRC, FTC, FRC).",
                         "required_count": 1,
                         "sort_order": 1,
                     }
@@ -223,9 +251,16 @@ CLUBS = [
             {
                 "slug": "robotics-honour-colours",
                 "name": "Robotics - Honour Colours",
-                "description": "Highest award level for outstanding robotics students.",
+                "description": "Highest award level for outstanding robotics achievement.",
                 "colour": "#10b981",
-                "criteria": [],
+                "criteria": [
+                    {
+                        "title": "National finalist or International qualification",
+                        "description": "Finalist in a recognized National Level competition OR Qualification for International Level Championships (eg FLL, RoboCup, VRC, FTC, FRC).",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    }
+                ],
             }
         ],
         "criteria": [],
