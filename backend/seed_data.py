@@ -37,8 +37,8 @@ CLUBS = [
                 "colour": "#f59e0b",
                 "criteria": [
                     {
-                        "title": "Outstanding contribution (2+ years)",
-                        "description": "Outstanding contribution to the Club for 2 or more years. Applications considered from Year 9 and above.",
+                        "title": "Member for 2 or more years",
+                        "description": "Member of the club for 2 or more years. Applications considered from Year 9 and above.",
                         "required_count": 1,
                         "year_group_applicable": 9,
                         "sort_order": 0,
@@ -52,8 +52,8 @@ CLUBS = [
                 "colour": "#f59e0b",
                 "criteria": [
                     {
-                        "title": "Outstanding contribution (4+ years)",
-                        "description": "Outstanding contribution to the club for 4 or more years.",
+                        "title": "Member for 4 or more years",
+                        "description": "Member of the club for 4 or more years.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
@@ -72,8 +72,8 @@ CLUBS = [
                 "colour": "#f59e0b",
                 "criteria": [
                     {
-                        "title": "Outstanding media student (4+ years)",
-                        "description": "Outstanding media student for 4 or more years.",
+                        "title": "Member for 4 or more years",
+                        "description": "Member of the club for 4 or more years.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
@@ -86,7 +86,15 @@ CLUBS = [
                 ],
             },
         ],
-        "criteria": [],
+        "criteria": [
+            {"title": "Member for 2 or more years", "description": "Member of the club for 2 or more years.", "required_count": 1, "sort_order": 0},
+            {"title": "Member for 3 or more years", "description": "Member of the club for 3 or more years.", "required_count": 1, "sort_order": 1},
+            {"title": "Member for 4 or more years", "description": "Member of the club for 4 or more years.", "required_count": 1, "sort_order": 2},
+            {"title": "Mentor for 1 year", "description": "Served as a mentor for 1 year.", "required_count": 1, "sort_order": 3},
+            {"title": "Mentor for 2 years", "description": "Served as a mentor for 2 years.", "required_count": 1, "sort_order": 4},
+            {"title": "Mentor for 3 years", "description": "Served as a mentor for 3 years.", "required_count": 1, "sort_order": 5},
+            {"title": "Club Captain", "description": "Served as Club Captain.", "required_count": 1, "sort_order": 6},
+        ],
     },
     {
         "slug": "programming",
@@ -113,8 +121,8 @@ CLUBS = [
                 "colour": "#6366f1",
                 "criteria": [
                     {
-                        "title": "Outstanding contribution (2+ years)",
-                        "description": "Outstanding contribution to the Club for 2 or more years.",
+                        "title": "Member for 2 or more years",
+                        "description": "Member of the club for 2 or more years.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
@@ -139,8 +147,8 @@ CLUBS = [
                 "colour": "#6366f1",
                 "criteria": [
                     {
-                        "title": "Outstanding contribution (3+ years)",
-                        "description": "Outstanding contribution to the Club for 3 or more years",
+                        "title": "Member for 3 or more years",
+                        "description": "Member of the club for 3 or more years.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
@@ -159,8 +167,8 @@ CLUBS = [
                 "colour": "#6366f1",
                 "criteria": [
                     {
-                        "title": "Outstanding programming student (4+ years)",
-                        "description": "Outstanding Programming student for 4 or more years.",
+                        "title": "Member for 4 or more years",
+                        "description": "Member of the club for 4 or more years.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
@@ -173,7 +181,15 @@ CLUBS = [
                 ],
             },
         ],
-        "criteria": [],
+        "criteria": [
+            {"title": "Member for 2 or more years", "description": "Member of the club for 2 or more years.", "required_count": 1, "sort_order": 0},
+            {"title": "Member for 3 or more years", "description": "Member of the club for 3 or more years.", "required_count": 1, "sort_order": 1},
+            {"title": "Member for 4 or more years", "description": "Member of the club for 4 or more years.", "required_count": 1, "sort_order": 2},
+            {"title": "Mentor for 1 year", "description": "Served as a mentor for 1 year.", "required_count": 1, "sort_order": 3},
+            {"title": "Mentor for 2 years", "description": "Served as a mentor for 2 years.", "required_count": 1, "sort_order": 4},
+            {"title": "Mentor for 3 years", "description": "Served as a mentor for 3 years.", "required_count": 1, "sort_order": 5},
+            {"title": "Club Captain", "description": "Served as Club Captain.", "required_count": 1, "sort_order": 6},
+        ],
     },
     {
         "slug": "robotics",
@@ -188,8 +204,8 @@ CLUBS = [
                 "colour": "#10b981",
                 "criteria": [
                     {
-                        "title": "Outstanding contribution (2+ years)",
-                        "description": "Outstanding contribution to the Club for 2 or more years.",
+                        "title": "Member for 2 or more years",
+                        "description": "Member of the club for 2 or more years.",
                         "required_count": 1,
                         "sort_order": 0,
                     }
@@ -202,8 +218,8 @@ CLUBS = [
                 "colour": "#10b981",
                 "criteria": [
                     {
-                        "title": "Mentoring junior team (1+ years)",
-                        "description": "At least ONE year of Mentoring of a Junior Robotics team.",
+                        "title": "Mentor for 1 year",
+                        "description": "Served as a mentor for 1 year.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
@@ -222,8 +238,8 @@ CLUBS = [
                 "colour": "#10b981",
                 "criteria": [
                     {
-                        "title": "Outstanding contribution (4+ years)",
-                        "description": "Outstanding contribution to the club for 4 or more years.",
+                        "title": "Member for 4 or more years",
+                        "description": "Member of the club for 4 or more years.",
                         "required_count": 1,
                         "sort_order": 0,
                     }
@@ -236,8 +252,8 @@ CLUBS = [
                 "colour": "#10b981",
                 "criteria": [
                     {
-                        "title": "Mentoring junior team (1+ years)",
-                        "description": "At least ONE year of Mentoring of a Junior Robotics team.",
+                        "title": "Mentor for 1 year",
+                        "description": "Served as a mentor for 1 year.",
                         "required_count": 1,
                         "sort_order": 0,
                     },
@@ -264,7 +280,15 @@ CLUBS = [
                 ],
             }
         ],
-        "criteria": [],
+        "criteria": [
+            {"title": "Member for 2 or more years", "description": "Member of the club for 2 or more years.", "required_count": 1, "sort_order": 0},
+            {"title": "Member for 3 or more years", "description": "Member of the club for 3 or more years.", "required_count": 1, "sort_order": 1},
+            {"title": "Member for 4 or more years", "description": "Member of the club for 4 or more years.", "required_count": 1, "sort_order": 2},
+            {"title": "Mentor for 1 year", "description": "Served as a mentor for 1 year.", "required_count": 1, "sort_order": 3},
+            {"title": "Mentor for 2 years", "description": "Served as a mentor for 2 years.", "required_count": 1, "sort_order": 4},
+            {"title": "Mentor for 3 years", "description": "Served as a mentor for 3 years.", "required_count": 1, "sort_order": 5},
+            {"title": "Club Captain", "description": "Served as Club Captain.", "required_count": 1, "sort_order": 6},
+        ],
     },
 ]
 
@@ -358,6 +382,11 @@ async def upsert_staff(session: AsyncSession, data: dict) -> None:
 
 async def seed():
     print("=== TKS Colours — Database Seed ===\n")
+    from app.database import Base
+    import app.models  # ensure all models are registered
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
     async with AsyncSessionLocal() as session:
         async with session.begin():
             print("── Cleaning up old database tables ──")

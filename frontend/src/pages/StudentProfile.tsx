@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, CheckCircle2, PlusCircle, ClipboardList, Trophy } from 'lucide-react'
 import { studentsApi, clubsApi, achievementsApi, applicationsApi } from '@/api/client'
 import { format } from 'date-fns'
+import type { Club, Achievement, Application } from '@/types'
 
 function ProgressRing({ met, total }: { met: number; total: number }) {
   const pct = total === 0 ? 0 : Math.round((met / total) * 100)
@@ -26,6 +27,84 @@ function ProgressRing({ met, total }: { met: number; total: number }) {
         </span>
       </div>
       <p className="text-xs text-slate-400 mt-1">{met}/{total}</p>
+    </div>
+  )
+}
+
+function ClubProgressCard({
+  club,
+  achievements,
+  applications,
+  allClubs,
+}: {
+  club: Club
+  achievements: Achievement[]
+  applications: Application[]
+  allClubs: Club[]
+}) {
+  const { data: criteria = [] } = useQuery({
+    queryKey: ['criteria', club.id],
+    queryFn: () => clubsApi.criteria(club.id),
+  })
+
+  // Match achievements within the club family by exact ID or by title
+  const clubAchievements = achievements.filter(a => {
+    if (!a.criterion) return false
+    if (a.criterion.club_id === club.id) return true
+    
+    const achievementClub = allClubs.find(c => c.id === a.criterion?.club_id)
+    if (!achievementClub) return false
+
+    const aParentId = achievementClub.parent_club_id || achievementClub.id
+    const currentParentId = club.parent_club_id || club.id
+
+    if (aParentId === currentParentId) {
+      return criteria.some(c => c.title === a.criterion?.title)
+    }
+    return false
+  })
+
+  const clubApp = applications.find(a => a.club_id === club.id)
+
+  return (
+    <div className="card p-5">
+      <div className="flex items-center gap-3 mb-4">
+        <div
+          className="w-8 h-8 rounded-lg flex items-center justify-center"
+          style={{ background: club.colour + '33' }}
+        >
+          <Trophy className="w-4 h-4" style={{ color: club.colour }} />
+        </div>
+        <div className="flex-1">
+          <p className="font-semibold text-white text-sm">{club.name}</p>
+          {clubApp && (
+            <span className={`badge badge-${clubApp.status} text-[10px]`}>
+              {clubApp.status}
+            </span>
+          )}
+        </div>
+        <ProgressRing met={clubAchievements.length} total={criteria.length} />
+      </div>
+      {clubAchievements.length === 0 ? (
+        <p className="text-xs text-slate-500">No achievements logged yet</p>
+      ) : (
+        <ul className="space-y-2">
+          {clubAchievements.slice(0, 3).map(a => (
+            <li key={a.id} className="criterion-item-met">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-medium text-white">{a.criterion?.title}</p>
+                {a.evidence_note && (
+                  <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-2">{a.evidence_note}</p>
+                )}
+                <p className="text-[10px] text-slate-500 mt-0.5">
+                  {format(new Date(a.achieved_at), 'd MMM yyyy')}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
@@ -97,51 +176,15 @@ export default function StudentProfile() {
           Club Progress
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {allClubs.map(club => {
-            const clubAchievements = achievements.filter(a => a.criterion?.club_id === club.id)
-            const clubApp = applications.find(a => a.club_id === club.id)
-            return (
-              <div key={club.id} className="card p-5">
-                <div className="flex items-center gap-3 mb-4">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: club.colour + '33' }}
-                  >
-                    <Trophy className="w-4 h-4" style={{ color: club.colour }} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-white text-sm">{club.name}</p>
-                    {clubApp && (
-                      <span className={`badge badge-${clubApp.status} text-[10px]`}>
-                        {clubApp.status}
-                      </span>
-                    )}
-                  </div>
-                  <ProgressRing met={clubAchievements.length} total={3} />
-                </div>
-                {clubAchievements.length === 0 ? (
-                  <p className="text-xs text-slate-500">No achievements logged yet</p>
-                ) : (
-                  <ul className="space-y-2">
-                    {clubAchievements.slice(0, 3).map(a => (
-                      <li key={a.id} className="criterion-item-met">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-xs font-medium text-white">{a.criterion?.title}</p>
-                          {a.evidence_note && (
-                            <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-2">{a.evidence_note}</p>
-                          )}
-                          <p className="text-[10px] text-slate-500 mt-0.5">
-                            {format(new Date(a.achieved_at), 'd MMM yyyy')}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )
-          })}
+          {allClubs.map(club => (
+            <ClubProgressCard
+              key={club.id}
+              club={club}
+              achievements={achievements}
+              applications={applications}
+              allClubs={allClubs}
+            />
+          ))}
         </div>
       </div>
 

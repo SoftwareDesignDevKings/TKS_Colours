@@ -53,14 +53,20 @@ async def _resolve_criteria_club(db: AsyncSession, club_id: str) -> Club | None:
 
 async def _get_member_club_ids(db: AsyncSession, criteria_club_id: str) -> list[str]:
     """
-    Return the criteria club id PLUS all its sub-club ids.
+    Return all club IDs in the family (parent and all sub-clubs) for the given club.
     Achievements logged against any of these count toward the criteria.
     """
+    club = await db.get(Club, criteria_club_id)
+    if not club:
+        return [criteria_club_id]
+        
+    parent_id = club.parent_club_id if club.parent_club_id else club.id
+    
     sub_result = await db.execute(
-        select(Club.id).where(Club.parent_club_id == criteria_club_id)
+        select(Club.id).where(Club.parent_club_id == parent_id)
     )
     sub_ids = sub_result.scalars().all()
-    return [criteria_club_id] + list(sub_ids)
+    return [parent_id] + list(sub_ids)
 
 
 async def check_and_trigger(
@@ -74,6 +80,10 @@ async def check_and_trigger(
     # 1. Resolve to criteria club
     criteria_club = await _resolve_criteria_club(db, club_id)
     if criteria_club is None:
+        return None
+
+    # Parent clubs (which hold general milestones) do not trigger Colours award applications
+    if criteria_club.parent_club_id is None:
         return None
 
     # 2. Get all active criteria for the resolved club
@@ -103,13 +113,16 @@ async def check_and_trigger(
         if criterion.year_group_applicable and student.year_group < criterion.year_group_applicable:
             return None
 
+        # Count achievements by matching ID or matching Title in the same club family
         count_result = await db.execute(
             select(func.count(Achievement.id))
             .join(Criterion, Achievement.criterion_id == Criterion.id)
             .where(
                 Achievement.student_id == student_id,
-                Achievement.criterion_id == criterion.id,
-                Criterion.club_id.in_(member_ids),
+                (Achievement.criterion_id == criterion.id) | (
+                    (Criterion.title == criterion.title) &
+                    (Criterion.club_id.in_(member_ids))
+                ),
             )
         )
         count = count_result.scalar_one()
@@ -211,13 +224,16 @@ async def get_criteria_status(
         if criterion.year_group_applicable and student.year_group < criterion.year_group_applicable:
             year_group_ok = False
 
+        # Count achievements by matching ID or matching Title in the same club family
         count_result = await db.execute(
             select(func.count(Achievement.id))
             .join(Criterion, Achievement.criterion_id == Criterion.id)
             .where(
                 Achievement.student_id == student_id,
-                Achievement.criterion_id == criterion.id,
-                Criterion.club_id.in_(member_ids),
+                (Achievement.criterion_id == criterion.id) | (
+                    (Criterion.title == criterion.title) &
+                    (Criterion.club_id.in_(member_ids))
+                ),
             )
         )
         count = count_result.scalar_one()
