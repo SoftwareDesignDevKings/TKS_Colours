@@ -29,38 +29,68 @@ CLUBS = [
         "name": "Media",
         "description": "Students explore digital media creation including photography, video production, podcasting, and graphic design.",
         "colour": "#f59e0b",  # amber
-        "sub_clubs": [],
-        "criteria": [
+        "sub_clubs": [
             {
-                "title": "Complete a media project",
-                "description": "Plan and complete a media project such as a short film, podcast episode, photo essay, or digital design piece.",
-                "required_count": 1,
-                "sort_order": 0,
+                "slug": "media-half-colours",
+                "name": "Media - Half Colours",
+                "description": "Award level for initial outstanding contribution to Media club.",
+                "colour": "#f59e0b",
+                "criteria": [
+                    {
+                        "title": "Outstanding contribution (2+ years)",
+                        "description": "Outstanding contribution to the Club for 2 or more years. Applications considered from Year 9 and above.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    }
+                ],
             },
             {
-                "title": "Present or publish your work",
-                "description": "Share your completed project with an audience — e.g. school showcase, school website, or social media with staff approval.",
-                "required_count": 1,
-                "sort_order": 1,
+                "slug": "media-full-colours",
+                "name": "Media - Full Colours",
+                "description": "Award level for extended outstanding contribution and competition placement.",
+                "colour": "#f59e0b",
+                "criteria": [
+                    {
+                        "title": "Outstanding contribution (4+ years)",
+                        "description": "Outstanding contribution to the club for 4 or more years.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    },
+                    {
+                        "title": "Competition placement",
+                        "description": "Placement in recognised state, national and international competitions eg Screen It, Tropfest Jr, My Rode Reel.",
+                        "required_count": 1,
+                        "sort_order": 1,
+                    }
+                ],
             },
             {
-                "title": "Attend club sessions",
-                "description": "Attend at least 8 Media club sessions across the academic year.",
-                "required_count": 8,
-                "sort_order": 2,
-            },
-            {
-                "title": "Contribute feedback to a peer's project",
-                "description": "Provide constructive written or verbal feedback on at least one other student's media project.",
-                "required_count": 1,
-                "sort_order": 3,
+                "slug": "media-honour-colours",
+                "name": "Media - Honour Colours",
+                "description": "Highest award level for outstanding media students with top competition placements.",
+                "colour": "#f59e0b",
+                "criteria": [
+                    {
+                        "title": "Outstanding media student (4+ years)",
+                        "description": "Outstanding media student for 4 or more years.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    },
+                    {
+                        "title": "First place in competition",
+                        "description": "First place in recognised state, national and international competitions eg Screen It, Tropfest Jr, My Rode Reel.",
+                        "required_count": 1,
+                        "sort_order": 1,
+                    }
+                ],
             },
         ],
+        "criteria": [],
     },
     {
         "slug": "programming",
         "name": "Programming",
-        "description": "Students develop software skills through coding projects, competitions, and collaborative development. Includes Cyber Security and AI sub-clubs whose achievements count toward Programming criteria.",
+        "description": "Students develop software skills through coding projects, competitions, and collaborative development. Includes Cyber Security and AI sub-clubs.",
         "colour": "#6366f1",  # indigo
         "sub_clubs": [
             {
@@ -75,66 +105,130 @@ CLUBS = [
                 "description": "Explores artificial intelligence, machine learning concepts, and practical AI tool usage.",
                 "colour": "#8b5cf6",  # violet
             },
+            {
+                "slug": "programming-half-colours",
+                "name": "Programming - Half Colours",
+                "description": "Award level for initial outstanding contribution to Programming club.",
+                "colour": "#6366f1",
+                "criteria": [
+                    {
+                        "title": "Outstanding contribution (2+ years)",
+                        "description": "Outstanding contribution to the Club for 2 or more years.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    },
+                    {
+                        "title": "Elimination round qualification",
+                        "description": "Qualify for elimination round in recognised state, national and international competitions eg UNSW Prog Comp, GROK Challenge, CyberTaipan",
+                        "required_count": 1,
+                        "sort_order": 1,
+                    },
+                    {
+                        "title": "High Distinction / Gold Placement",
+                        "description": "High Distinction/Gold Placement in recognised state and national competitions eg AIO, Cambridge",
+                        "required_count": 1,
+                        "sort_order": 2,
+                    }
+                ],
+            },
+            {
+                "slug": "programming-full-colours",
+                "name": "Programming - Full Colours",
+                "description": "Award level for extended outstanding contribution and competition placement.",
+                "colour": "#6366f1",
+                "criteria": [
+                    {
+                        "title": "Outstanding contribution (3+ years)",
+                        "description": "Outstanding contribution to the Club for 3 or more years",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    },
+                    {
+                        "title": "Competition placement",
+                        "description": "Placement in recognised state, national and international competitions eg UNSW Prog Comp, GROK Challenge, CyberTaipan",
+                        "required_count": 1,
+                        "sort_order": 1,
+                    }
+                ],
+            },
+            {
+                "slug": "programming-honour-colours",
+                "name": "Programming - Honour Colours",
+                "description": "Highest award level for outstanding programming students with top competition wins.",
+                "colour": "#6366f1",
+                "criteria": [
+                    {
+                        "title": "Outstanding programming student (4+ years)",
+                        "description": "Outstanding Programming student for 4 or more years.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    },
+                    {
+                        "title": "First in competition",
+                        "description": "First in recognised state, national and international competitions eg UNSW Prog Comp, CyberTaipan",
+                        "required_count": 1,
+                        "sort_order": 1,
+                    }
+                ],
+            },
         ],
-        "criteria": [
-            {
-                "title": "Complete a programming project",
-                "description": "Design and build a working software project — a game, web app, script, or tool — and document it with a README.",
-                "required_count": 1,
-                "sort_order": 0,
-            },
-            {
-                "title": "Participate in a challenge or competition",
-                "description": "Take part in a coding challenge, hackathon, CTF, or AI competition (in-school or external).",
-                "required_count": 1,
-                "sort_order": 1,
-            },
-            {
-                "title": "Attend club sessions",
-                "description": "Attend at least 8 Programming, Cyber, or AI club sessions across the academic year. Sessions from any of these sub-clubs count.",
-                "required_count": 8,
-                "sort_order": 2,
-            },
-            {
-                "title": "Teach or mentor a peer",
-                "description": "Help another student learn a concept — e.g. run a short demo, write a tutorial, or act as a coding buddy.",
-                "required_count": 1,
-                "sort_order": 3,
-            },
-        ],
+        "criteria": [],
     },
     {
         "slug": "robotics",
         "name": "Robotics",
         "description": "Students build, program, and compete with robots using platforms such as LEGO Mindstorms, VEX, or Arduino.",
         "colour": "#10b981",  # emerald
-        "sub_clubs": [],
-        "criteria": [
+        "sub_clubs": [
             {
-                "title": "Build and program a robot",
-                "description": "Construct and program a robot that can complete at least one defined task or challenge.",
-                "required_count": 1,
-                "sort_order": 0,
+                "slug": "robotics-half-colours",
+                "name": "Robotics - Half Colours",
+                "description": "Award level for initial outstanding contribution to Robotics club.",
+                "colour": "#10b981",
+                "criteria": [
+                    {
+                        "title": "Build and program a robot",
+                        "description": "Construct and program a robot that can complete at least one defined task or challenge.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    },
+                    {
+                        "title": "Attend club sessions",
+                        "description": "Attend at least 8 Robotics club sessions across the academic year.",
+                        "required_count": 8,
+                        "sort_order": 1,
+                    }
+                ],
             },
             {
-                "title": "Participate in a robotics challenge",
-                "description": "Take part in an in-school or inter-school robotics competition or demonstration event.",
-                "required_count": 1,
-                "sort_order": 1,
+                "slug": "robotics-full-colours",
+                "name": "Robotics - Full Colours",
+                "description": "Award level for extended outstanding contribution and competition placement.",
+                "colour": "#10b981",
+                "criteria": [
+                    {
+                        "title": "Participate in a robotics challenge",
+                        "description": "Take part in an in-school or inter-school robotics competition or demonstration event.",
+                        "required_count": 1,
+                        "sort_order": 0,
+                    },
+                    {
+                        "title": "Document a build process",
+                        "description": "Keep an engineering journal or write-up documenting the design decisions and iteration of a build.",
+                        "required_count": 1,
+                        "sort_order": 1,
+                    }
+                ],
             },
             {
-                "title": "Attend club sessions",
-                "description": "Attend at least 8 Robotics club sessions across the academic year.",
-                "required_count": 8,
-                "sort_order": 2,
-            },
-            {
-                "title": "Document a build process",
-                "description": "Keep an engineering journal or write-up documenting the design decisions and iteration of a build.",
-                "required_count": 1,
-                "sort_order": 3,
-            },
+                "slug": "robotics-honour-colours",
+                "name": "Robotics - Honour Colours",
+                "description": "Highest award level for outstanding robotics students.",
+                "colour": "#10b981",
+                "criteria": [],
+            }
         ],
+        "criteria": [],
     },
 ]
 
@@ -229,14 +323,25 @@ async def seed():
     print("=== TKS Colours — Database Seed ===\n")
     async with AsyncSessionLocal() as session:
         async with session.begin():
+            print("── Cleaning up old database tables ──")
+            await session.execute(text("DELETE FROM notifications"))
+            await session.execute(text("DELETE FROM reminders"))
+            await session.execute(text("DELETE FROM applications"))
+            await session.execute(text("DELETE FROM achievements"))
+            await session.execute(text("DELETE FROM criteria"))
+            await session.execute(text("DELETE FROM clubs"))
+
             print("── Clubs & Criteria ──")
             for club_data in CLUBS:
                 # Insert top-level club
                 club_id = await upsert_club(session, club_data)
 
-                # Insert sub-clubs (no criteria on sub-clubs)
+                # Insert sub-clubs
                 for sub_data in club_data.get("sub_clubs", []):
-                    await upsert_club(session, sub_data, parent_id=club_id)
+                    sub_club_id = await upsert_club(session, sub_data, parent_id=club_id)
+                    # Seed criteria for sub-club if present
+                    for criterion_data in sub_data.get("criteria", []):
+                        await upsert_criterion(session, sub_club_id, criterion_data)
 
                 # Insert criteria on the top-level club
                 for criterion_data in club_data.get("criteria", []):

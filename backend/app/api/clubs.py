@@ -43,8 +43,18 @@ async def list_criteria(club_id: str, db: AsyncSession = Depends(get_db)):
     club = await db.get(Club, club_id)
     if not club:
         raise HTTPException(status_code=404, detail="Club not found.")
-    # Resolve to parent if this is a sub-club
-    resolved_id = club.parent_club_id if club.parent_club_id else club.id
+    # Resolve to parent only if this is a sub-club and the sub-club itself has no criteria
+    from sqlalchemy import func
+    criteria_count = await db.scalar(
+        select(func.count(Criterion.id)).where(
+            Criterion.club_id == club.id,
+            Criterion.is_active == True,
+        )
+    )
+    resolved_id = club.id
+    if criteria_count == 0 and club.parent_club_id:
+        resolved_id = club.parent_club_id
+
     result = await db.execute(
         select(Criterion)
         .where(Criterion.club_id == resolved_id, Criterion.is_active == True)

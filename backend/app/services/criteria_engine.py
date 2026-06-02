@@ -22,52 +22,64 @@ from app.models.notification import NotificationType
 REMINDER_DAYS_DEFAULT = 60  # days before first reminder fires (2 months)
 
 
-async def _resolve_top_level_club(db: AsyncSession, club_id: str) -> Club | None:
+async def _resolve_criteria_club(db: AsyncSession, club_id: str) -> Club | None:
     """
-    If club_id belongs to a sub-club (has a parent_club_id), return the parent.
-    Otherwise return the club itself.  Always works with the top-level club for
-    criteria evaluation so that sub-club achievements roll up correctly.
+    Resolve to the club that actually defines the criteria.
+    If the club has criteria, return it.
+    Otherwise, if it has a parent, try resolving to the parent.
+    Failsafe: return the club itself.
     """
     club = await db.get(Club, club_id)
     if club is None:
         return None
+    
+    # Check if this club has active criteria
+    criteria_count = await db.scalar(
+        select(func.count(Criterion.id)).where(
+            Criterion.club_id == club.id,
+            Criterion.is_active == True,
+        )
+    )
+    if criteria_count > 0:
+        return club
+        
     if club.parent_club_id:
         parent = await db.get(Club, club.parent_club_id)
-        return parent
+        if parent:
+            return parent
+            
     return club
 
 
-async def _get_member_club_ids(db: AsyncSession, top_level_club_id: str) -> list[str]:
+async def _get_member_club_ids(db: AsyncSession, criteria_club_id: str) -> list[str]:
     """
-    Return the top-level club id PLUS all its sub-club ids.
-    Achievements logged against any of these count toward the top-level criteria.
+    Return the criteria club id PLUS all its sub-club ids.
+    Achievements logged against any of these count toward the criteria.
     """
     sub_result = await db.execute(
-        select(Club.id).where(Club.parent_club_id == top_level_club_id)
+        select(Club.id).where(Club.parent_club_id == criteria_club_id)
     )
     sub_ids = sub_result.scalars().all()
-    return [top_level_club_id] + list(sub_ids)
+    return [criteria_club_id] + list(sub_ids)
 
 
 async def check_and_trigger(
     db: AsyncSession, student_id: str, club_id: str
 ) -> Application | None:
     """
-    Check if the student has met all criteria for the (resolved) top-level club.
+    Check if the student has met all criteria for the resolved criteria club.
     If yes and no pending/approved application already exists, create one.
     Returns the Application if newly created, else None.
-
-    ``club_id`` may be a sub-club — this function resolves upward automatically.
     """
-    # 1. Resolve to top-level club
-    top_club = await _resolve_top_level_club(db, club_id)
-    if top_club is None:
+    # 1. Resolve to criteria club
+    criteria_club = await _resolve_criteria_club(db, club_id)
+    if criteria_club is None:
         return None
 
-    # 2. Get all active criteria for the top-level club
+    # 2. Get all active criteria for the resolved club
     criteria_result = await db.execute(
         select(Criterion).where(
-            Criterion.club_id == top_club.id,
+            Criterion.club_id == criteria_club.id,
             Criterion.is_active == True,
         )
     )
@@ -77,7 +89,7 @@ async def check_and_trigger(
         return None
 
     # 3. Collect all club IDs whose achievements count (parent + sub-clubs)
-    member_ids = await _get_member_club_ids(db, top_club.id)
+    member_ids = await _get_member_club_ids(db, criteria_club.id)
 
     # 4. Check how many achievements exist per criterion for this student,
     #    counting across all member clubs
@@ -99,17 +111,17 @@ async def check_and_trigger(
     existing = await db.execute(
         select(Application).where(
             Application.student_id == student_id,
-            Application.club_id == top_club.id,
+            Application.club_id == criteria_club.id,
             Application.status.in_([ApplicationStatus.PENDING, ApplicationStatus.APPROVED]),
         )
     )
     if existing.scalars().first():
         return None  # Already has a pending or approved application
 
-    # 6. Create the application (always against the top-level club)
+    # 6. Create the application (against the criteria club)
     application = Application(
         student_id=student_id,
-        club_id=top_club.id,
+        club_id=criteria_club.id,
         status=ApplicationStatus.PENDING,
         auto_triggered=True,
     )
@@ -119,14 +131,14 @@ async def check_and_trigger(
     # 7. Create a notification
     notification = Notification(
         type=NotificationType.CRITERIA_MET,
-        title=f"Criteria met — {top_club.name}",
+        title=f"Criteria met — {criteria_club.name}",
         body=(
-            f"A student has met all criteria for {top_club.name} "
+            f"A student has met all criteria for {criteria_club.name} "
             f"and is ready for an award application."
         ),
         student_id=student_id,
         application_id=application.id,
-        club_id=top_club.id,
+        club_id=criteria_club.id,
     )
     db.add(notification)
 
@@ -149,12 +161,10 @@ async def get_criteria_status(
 ) -> dict:
     """
     Returns detailed status of a student's progress against a club's criteria.
-    ``club_id`` may be a sub-club — this function resolves upward automatically
-    and counts achievements from all member clubs (parent + sub-clubs).
     """
-    # Resolve to top-level club
-    top_club = await _resolve_top_level_club(db, club_id)
-    if top_club is None:
+    # Resolve to criteria club
+    criteria_club = await _resolve_criteria_club(db, club_id)
+    if criteria_club is None:
         return {
             "club_id": club_id,
             "total_criteria": 0,
@@ -165,13 +175,13 @@ async def get_criteria_status(
 
     criteria_result = await db.execute(
         select(Criterion).where(
-            Criterion.club_id == top_club.id,
+            Criterion.club_id == criteria_club.id,
             Criterion.is_active == True,
         ).order_by(Criterion.sort_order)
     )
     criteria = criteria_result.scalars().all()
 
-    member_ids = await _get_member_club_ids(db, top_club.id)
+    member_ids = await _get_member_club_ids(db, criteria_club.id)
 
     detail = []
     met = 0
@@ -199,7 +209,7 @@ async def get_criteria_status(
         })
 
     return {
-        "club_id": top_club.id,
+        "club_id": criteria_club.id,
         "total_criteria": len(criteria),
         "met_criteria": met,
         "is_complete": met == len(criteria) and len(criteria) > 0,
