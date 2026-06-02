@@ -15,7 +15,7 @@ achievements from Cyber *and* AI both count toward Programming's criteria.
 from datetime import datetime, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
-from app.models import Achievement, Criterion, Application, Notification, Club
+from app.models import Achievement, Criterion, Application, Notification, Club, Student
 from app.models.application import ApplicationStatus
 from app.models.notification import NotificationType
 
@@ -91,9 +91,18 @@ async def check_and_trigger(
     # 3. Collect all club IDs whose achievements count (parent + sub-clubs)
     member_ids = await _get_member_club_ids(db, criteria_club.id)
 
+    # We need the student's year group to verify any year group applicability constraints
+    student = await db.get(Student, student_id)
+    if not student:
+        return None
+
     # 4. Check how many achievements exist per criterion for this student,
     #    counting across all member clubs
     for criterion in criteria:
+        # Check if student meets the minimum year group requirements for this criterion
+        if criterion.year_group_applicable and student.year_group < criterion.year_group_applicable:
+            return None
+
         count_result = await db.execute(
             select(func.count(Achievement.id))
             .join(Criterion, Achievement.criterion_id == Criterion.id)
@@ -181,12 +190,27 @@ async def get_criteria_status(
     )
     criteria = criteria_result.scalars().all()
 
+    student = await db.get(Student, student_id)
+    if not student:
+        return {
+            "club_id": criteria_club.id,
+            "total_criteria": 0,
+            "met_criteria": 0,
+            "is_complete": False,
+            "criteria_detail": [],
+        }
+
     member_ids = await _get_member_club_ids(db, criteria_club.id)
 
     detail = []
     met = 0
 
     for criterion in criteria:
+        # Check year group restriction
+        year_group_ok = True
+        if criterion.year_group_applicable and student.year_group < criterion.year_group_applicable:
+            year_group_ok = False
+
         count_result = await db.execute(
             select(func.count(Achievement.id))
             .join(Criterion, Achievement.criterion_id == Criterion.id)
@@ -197,7 +221,7 @@ async def get_criteria_status(
             )
         )
         count = count_result.scalar_one()
-        is_met = count >= criterion.required_count
+        is_met = count >= criterion.required_count and year_group_ok
         if is_met:
             met += 1
         detail.append({

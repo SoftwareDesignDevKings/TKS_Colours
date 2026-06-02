@@ -40,6 +40,7 @@ CLUBS = [
                         "title": "Outstanding contribution (2+ years)",
                         "description": "Outstanding contribution to the Club for 2 or more years. Applications considered from Year 9 and above.",
                         "required_count": 1,
+                        "year_group_applicable": 9,
                         "sort_order": 0,
                     }
                 ],
@@ -317,8 +318,8 @@ async def upsert_criterion(session: AsyncSession, club_id: str, data: dict) -> N
     criterion_id = str(uuid.uuid4())
     await session.execute(
         text("""
-            INSERT INTO criteria (id, club_id, title, description, required_count, sort_order, is_active, created_at)
-            VALUES (:id, :club_id, :title, :description, :required_count, :sort_order, true, now())
+            INSERT INTO criteria (id, club_id, title, description, required_count, year_group_applicable, sort_order, is_active, created_at)
+            VALUES (:id, :club_id, :title, :description, :required_count, :year_group_applicable, :sort_order, true, now())
         """),
         {
             "id": criterion_id,
@@ -326,6 +327,7 @@ async def upsert_criterion(session: AsyncSession, club_id: str, data: dict) -> N
             "title": data["title"],
             "description": data.get("description", ""),
             "required_count": data.get("required_count", 1),
+            "year_group_applicable": data.get("year_group_applicable"),
             "sort_order": data.get("sort_order", 0),
         },
     )
