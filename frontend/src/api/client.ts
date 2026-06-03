@@ -10,10 +10,21 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 })
 
+// Guarantee list endpoints always resolve to an array, even if the backend
+// responds with an error object, a paginated wrapper, or an unexpected shape.
+function toArray<T>(data: unknown): T[] {
+  if (Array.isArray(data)) return data as T[]
+  if (data && typeof data === 'object') {
+    const items = (data as Record<string, unknown>).items
+    if (Array.isArray(items)) return items as T[]
+  }
+  return []
+}
+
 // ── Students ─────────────────────────────────────────────────────────────────
 export const studentsApi = {
   list: (params?: { year_group?: number; is_active?: boolean; search?: string }) =>
-    api.get<Student[]>('/students', { params }).then(r => r.data),
+    api.get<Student[]>('/students', { params }).then(r => toArray<Student>(r.data)),
 
   get: (id: string) =>
     api.get<Student>(`/students/${id}`).then(r => r.data),
@@ -39,19 +50,19 @@ export const studentsApi = {
 // ── Clubs ─────────────────────────────────────────────────────────────────────
 export const clubsApi = {
   list: () =>
-    api.get<Club[]>('/clubs').then(r => r.data),
+    api.get<Club[]>('/clubs').then(r => toArray<Club>(r.data)),
 
   get: (id: string) =>
     api.get<Club>(`/clubs/${id}`).then(r => r.data),
 
   criteria: (clubId: string) =>
-    api.get<Criterion[]>(`/clubs/${clubId}/criteria`).then(r => r.data),
+    api.get<Criterion[]>(`/clubs/${clubId}/criteria`).then(r => toArray<Criterion>(r.data)),
 }
 
 // ── Achievements ─────────────────────────────────────────────────────────────
 export const achievementsApi = {
   list: (params?: { student_id?: string; club_id?: string }) =>
-    api.get<Achievement[]>('/achievements', { params }).then(r => r.data),
+    api.get<Achievement[]>('/achievements', { params }).then(r => toArray<Achievement>(r.data)),
 
   log: (payload: LogAchievementPayload) =>
     api.post<Achievement>('/achievements', payload).then(r => r.data),
@@ -68,7 +79,7 @@ export const achievementsApi = {
 // ── Applications ─────────────────────────────────────────────────────────────
 export const applicationsApi = {
   list: (params?: { status?: string; club_id?: string; student_id?: string }) =>
-    api.get<Application[]>('/applications', { params }).then(r => r.data),
+    api.get<Application[]>('/applications', { params }).then(r => toArray<Application>(r.data)),
 
   get: (id: string) =>
     api.get<Application>(`/applications/${id}`).then(r => r.data),
@@ -81,7 +92,7 @@ export const applicationsApi = {
 export const notificationsApi = {
   list: (unreadOnly = false) =>
     api.get<Notification[]>('/notifications', { params: { unread_only: unreadOnly } })
-      .then(r => r.data),
+      .then(r => toArray<Notification>(r.data)),
 
   unreadCount: () =>
     api.get<{ count: number }>('/notifications/unread-count').then(r => r.data),
@@ -96,7 +107,7 @@ export const notificationsApi = {
 // ── Staff ─────────────────────────────────────────────────────────────────────
 export const staffApi = {
   list: () =>
-    api.get<Staff[]>('/staff').then(r => r.data),
+    api.get<Staff[]>('/staff').then(r => toArray<Staff>(r.data)),
 }
 
 export default api
