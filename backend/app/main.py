@@ -87,6 +87,19 @@ async def health():
     return {"status": "ok", "version": "0.1.0"}
 
 
+@app.get("/health/db", tags=["Health"])
+async def health_db():
+    """Diagnostic: attempt a trivial DB query and surface any connection error."""
+    from sqlalchemy import text
+    from app.database import engine
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+        return {"db": "ok"}
+    except Exception as exc:  # noqa: BLE001 — intentionally surface the error
+        return {"db": "error", "type": type(exc).__name__, "detail": str(exc)}
+
+
 # ── Vercel Cron Endpoint ─────────────────────────────────────────────────────
 # Vercel Cron Jobs call this endpoint on a schedule (configured in vercel.json).
 # Replaces APScheduler's in-process cron when running in serverless mode.
