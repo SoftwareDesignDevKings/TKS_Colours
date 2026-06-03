@@ -65,9 +65,12 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+      // Strip the "/api" prefix so the dev backend (mounted at "/v1") matches
+      // production, where Vercel strips the "/api" routePrefix before forwarding.
       '/api': {
         target: 'http://localhost:8000',
         changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/api/, ''),
       },
     },
   },

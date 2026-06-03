@@ -69,12 +69,17 @@ app.add_middleware(
 )
 
 # ── Routers ───────────────────────────────────────────────────────────────────
-app.include_router(students.router, prefix="/api/v1")
-app.include_router(clubs.router, prefix="/api/v1")
-app.include_router(achievements.router, prefix="/api/v1")
-app.include_router(applications.router, prefix="/api/v1")
-app.include_router(notifications.router, prefix="/api/v1")
-app.include_router(staff.router, prefix="/api/v1")
+# On Vercel the backend is mounted with routePrefix "/api", which Vercel strips
+# before forwarding, so the app receives paths under "/v1". The frontend always
+# calls "/api/v1/*"; the Vite dev proxy strips "/api" to match this prefix.
+API_PREFIX = "/v1"
+
+app.include_router(students.router, prefix=API_PREFIX)
+app.include_router(clubs.router, prefix=API_PREFIX)
+app.include_router(achievements.router, prefix=API_PREFIX)
+app.include_router(applications.router, prefix=API_PREFIX)
+app.include_router(notifications.router, prefix=API_PREFIX)
+app.include_router(staff.router, prefix=API_PREFIX)
 
 
 @app.get("/health", tags=["Health"])
@@ -85,7 +90,7 @@ async def health():
 # ── Vercel Cron Endpoint ─────────────────────────────────────────────────────
 # Vercel Cron Jobs call this endpoint on a schedule (configured in vercel.json).
 # Replaces APScheduler's in-process cron when running in serverless mode.
-@app.get("/api/v1/cron/reminders", tags=["Cron"], include_in_schema=False)
+@app.get(f"{API_PREFIX}/cron/reminders", tags=["Cron"], include_in_schema=False)
 async def cron_reminders(request: Request):
     """Process due reminders — called by Vercel Cron Jobs."""
     # Verify the request comes from Vercel Cron (not external callers)
