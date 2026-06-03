@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 
@@ -22,5 +23,15 @@ class Settings(BaseSettings):
     MAIL_STARTTLS: bool = True
     MAIL_SSL_TLS: bool = False
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Automatically add Vercel deployment URLs to CORS when deployed
+        vercel_url = os.environ.get("VERCEL_URL")
+        if vercel_url:
+            self.CORS_ORIGINS = list(self.CORS_ORIGINS) + [
+                f"https://{vercel_url}",
+            ]
+
 
 settings = Settings()
+
