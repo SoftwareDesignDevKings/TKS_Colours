@@ -1,32 +1,13 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/dist",
-  "installCommand": "cd frontend && npm install",
-  "framework": null,
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/(css|js|assets|icons|registerSW.js|sw.js|workbox-.*.js|manifest.webmanifest)(.*)",
-      "destination": "/$1$2"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
+    "experimentalServices": {
+        "frontend": {
+            "root": "frontend",
+            "routePrefix": "/",
+            "framework": "vite"
+        },
+        "backend": {
+            "root": "backend",
+            "routePrefix": "/_/backend"
+        }
     }
-  ],
-  "functions": {
-    "api/index.py": {
-      "runtime": "@vercel/python@4",
-      "maxDuration": 30
-    }
-  },
-  "crons": [
-    {
-      "path": "/api/v1/cron/reminders",
-      "schedule": "0 8 * * *"
-    }
-  ]
 }
