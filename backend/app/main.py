@@ -23,10 +23,11 @@ if not IS_VERCEL:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ── Startup ───────────────────────────────────────────────────────────
-    # Create tables (for dev without Alembic; in prod, use `alembic upgrade head`)
-    if settings.APP_ENV == "development":
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
+    # Create tables if they don't exist. There is no Alembic migration setup, so
+    # this is the only schema bootstrap — it must run in production too (idempotent;
+    # create_all skips existing tables).
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
     # Schedule daily reminder processing at 08:00 (only when running as a server, not serverless)
     if scheduler is not None:
@@ -95,7 +96,8 @@ async def health_db():
     try:
         async with engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
-        return {"db": "ok"}
+            count = (await conn.execute(text("SELECT count(*) FROM students"))).scalar()
+        return {"db": "ok", "students": count}
     except Exception as exc:  # noqa: BLE001 — intentionally surface the error
         return {"db": "error", "type": type(exc).__name__, "detail": str(exc)}
 
